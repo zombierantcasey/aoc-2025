@@ -4,6 +4,7 @@ import kotlin.math.abs
 
 var currentValue = 50
 var zeroCount = 0
+var zeroRevolutionCount = 0
 var rotateLetter = "R"
 
 fun determinePosition(currentPosition: Int, rotationSide: String, rotationMovement: Int): Int {
@@ -56,7 +57,9 @@ fun part1() {
                 zeroCount = zeroCount + 1
             }
         }
-        println(zeroCount)
+        println("Part 1: " + zeroCount)
+        var part2 = zeroCount + zeroRevolutionCount
+        println("Part 2: " + part2)
     } catch (e: Exception) {
         println("Error reading file: ${e.message}")
     }
