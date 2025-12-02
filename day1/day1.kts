@@ -6,6 +6,7 @@ var currentValue = 50
 var zeroCount = 0
 var zeroRevolutionCount = 0
 var rotateLetter = "R"
+var rotationMovement = 0
 
 fun determinePosition(currentPosition: Int, rotationSide: String, rotationMovement: Int): Int {
     var newPosition: Int? = null
@@ -21,17 +22,36 @@ fun roundDownToNearest100(number: Int): Int {
     return (number / 100) * 100
 }
 
+fun detemineRevolution(nearest100: Int) {
+    var movement = 0
+    if (rotateLetter == "L") {
+        movement = currentValue - rotationMovement
+        if (movement < 0) {
+            if (currentValue != 0 && 100 - abs(movement) < 100) {
+                zeroRevolutionCount += 1
+            }
+        }
+    } else if (rotateLetter == "R") {
+        movement = currentValue + rotationMovement
+        if (movement > 100) {
+            zeroRevolutionCount += 1
+        }
+    }
+}
+
 fun overUnder100(number: Int): Int {
     var determinedPosition = 0
     if (number > 99) {
         var nearest100 = roundDownToNearest100(number)
         determinedPosition = number - nearest100
+        detemineRevolution(nearest100)
         return determinedPosition
     } else if (number < 0) {
         var nearest100 = roundDownToNearest100(abs(number))
         if (nearest100 == 0) {
             nearest100 = 100
         }
+        detemineRevolution(nearest100)
         return nearest100 - abs(number)
     } else {
         return number
@@ -49,10 +69,9 @@ fun part1() {
                 lineArray = line.split("L").toTypedArray()
                 rotateLetter = "L"
             }
-            var rotationMovement = lineArray[1].toInt()
+            rotationMovement = lineArray[1].toInt()
             var newValue = determinePosition(currentValue, rotateLetter, rotationMovement)
             currentValue = newValue
-            println(currentValue)
             if (currentValue == 0) {
                 zeroCount = zeroCount + 1
             }
