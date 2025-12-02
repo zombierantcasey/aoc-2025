@@ -2,6 +2,10 @@ import java.io.File
 import java.io.InputStream
 import kotlin.math.abs
 
+var currentValue = 50
+var zeroCount = 0
+var rotateLetter = "R"
+
 fun determinePosition(currentPosition: Int, rotationSide: String, rotationMovement: Int): Int {
     var newPosition: Int? = null
     if (rotationSide == "R") {
@@ -17,11 +21,16 @@ fun roundDownToNearest100(number: Int): Int {
 }
 
 fun overUnder100(number: Int): Int {
+    var determinedPosition = 0
     if (number > 99) {
         var nearest100 = roundDownToNearest100(number)
-        return number - nearest100
+        determinedPosition = number - nearest100
+        return determinedPosition
     } else if (number < 0) {
         var nearest100 = roundDownToNearest100(abs(number))
+        if (nearest100 == 0) {
+            nearest100 = 100
+        }
         return nearest100 - abs(number)
     } else {
         return number
@@ -29,14 +38,12 @@ fun overUnder100(number: Int): Int {
 }
 
 fun part1() {
-    val filePath = "/home/pierre/Documents/Coding/aoc-2025/day1/input.txt"
+    val filePath = "/home/pierre/Documents/Coding/aoc-2025/day1/test_input.txt"
     try {
         val lines = File(filePath).readLines()
-        var currentValue = 50
-        var zeroCount = 0
         lines.forEachIndexed { index, line ->
             var lineArray = line.split("R").toTypedArray()
-            var rotateLetter = "R"
+            rotateLetter = "R"
             if (lineArray.size == 1) {
                 lineArray = line.split("L").toTypedArray()
                 rotateLetter = "L"
@@ -44,6 +51,7 @@ fun part1() {
             var rotationMovement = lineArray[1].toInt()
             var newValue = determinePosition(currentValue, rotateLetter, rotationMovement)
             currentValue = newValue
+            println(currentValue)
             if (currentValue == 0) {
                 zeroCount = zeroCount + 1
             }
